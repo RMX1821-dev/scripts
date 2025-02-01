@@ -29,10 +29,8 @@ function lunch_build(){
 
 	if [[ "$USERDEBUG" == "1" ]]; then
 		lunch lineage_RMX1821-userdebug
-	elif [[ "$USER" == "1" ]]; then
-		lunch lineage_RMX1821-user 
 	else 
-		lunch lineage_RMX1821-userdebug
+		lunch lineage_RMX1821-user
 	fi
 }
 
@@ -51,6 +49,7 @@ if [[ "$CLEAN_BUILD" == "1" ]]; then
 else
 	echo "Doing dirty build."
 	lunch_build
+	make installclean
 	m bacon
 fi
 
