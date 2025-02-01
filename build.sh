@@ -4,7 +4,7 @@
 rm -rf .repo/local_manifests
 
 # Initialize repo
-repo init -u https://github.com/crdroidandroid/android.git -b 13.0 --git-lfs
+repo init -u https://github.com/LineageOS/android.git -b lineage-20.0 --git-lfs
 git clone https://github.com/RMX1821-dev/local_manifests -b main .repo/local_manifests
 
 # dependencies
