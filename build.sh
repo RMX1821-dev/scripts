@@ -5,6 +5,8 @@
 ############################################################
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ANDROID_TOP="$(cd ${SCRIPT_DIR}/../ && pwd)"
+REPO="main"
+CLEAN_BUILD="0"
 ANDROID_DIRS=( 
 	"device/realme/RMX1821" 
 	"kernel/realme/RMX1821"  
@@ -22,7 +24,6 @@ export BUILD_HOSTNAME=crave
 export KBUILD_USERNAME=rvsmooth
 export KBUILD_HOSTNAME=crave
 export TZ=Asia/Kolkata
-export TEST
 
 ############################################################
 #                         FUNCTIONS                        #
@@ -65,15 +66,15 @@ function build_dirty(){
 
 function check_project(){
 	if [ "$TEST" == "1" ]; then
-		export REPO=test
+		REPO=test
 	else
-		export REPO=main
+		REPO=main
 	fi
 
 	for DIR in ${ANDROID_DIRS[@]}; do
 		if [ ! -d "${ANDROID_TOP}/${DIR}" ]; then
 			echo "Projects not found"
-			export CLEAN_BUILD=1
+			CLEAN_BUILD=1
 		else
 			echo
 
@@ -94,5 +95,3 @@ else
 	echo "Doing dirty build"
 	build_dirty
 fi
-
-
