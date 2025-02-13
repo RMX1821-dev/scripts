@@ -62,27 +62,37 @@ function build_dirty(){
 	make installclean
 	m bacon
 }
+
+function check_project(){
+	if [ "$TEST" == "1" ]; then
+		export REPO=test
+	else
+		export REPO=main
+	fi
+
+	for DIR in ${ANDROID_DIRS[@]}; do
+		if [ ! -d "${ANDROID_TOP}/${DIR}" ]; then
+			echo "Projects not found"
+			export CLEAN_BUILD=1
+		else
+			echo
+
+		fi 
+	done
+}
 ############################################################
 #                         EXECUTION                        #
 ############################################################
 
 source build/envsetup.sh
 
-if [ "$TEST" == "1" ]; then
-	 export REPO=test
- else
-	 export REPO=main
+check_project
+
+if [ "$CLEAN_BUILD" == "1" ]; then
+	build_clean
+else
+	echo "Doing dirty build"
+	build_dirty
 fi
 
-for DIR in ${ANDROID_DIRS[@]}; do
-	if [ ! -d "${ANDROID_TOP}/${DIR}" ]; then
-		echo "Projects not found"
-		build_clean
-	elif 
-		[ "$CLEAN_BUILD" == "1" ]; then
-		build_clean
-	else
-		echo "Doing dirty build"
-		build_dirty
-	fi
-done
+
