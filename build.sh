@@ -22,7 +22,7 @@ export BUILD_HOSTNAME=crave
 export KBUILD_USERNAME=rvsmooth
 export KBUILD_HOSTNAME=crave
 export TZ=Asia/Kolkata
-export TEST=0
+export TEST
 
 ############################################################
 #                         FUNCTIONS                        #
