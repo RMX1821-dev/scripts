@@ -1,14 +1,28 @@
 #!/bin/bash
 
 ############################################################
+#                          VARS                            #
+############################################################
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ANDROID_TOP="$(cd ${SCRIPT_DIR}/../ && pwd)"
+ANDROID_DIRS=( 
+	"device/realme/RMX1821" 
+	"kernel/realme/RMX1821"  
+	"vendor/realme/RMX1821"
+	"vendor/extra"
+	"prebuilts/clang/host/linux-x86/clang-r437112"
+	"device/mediatek/sepolicy_vndr"
+)
+
+############################################################
 #                          ENV VARS                        #
 ############################################################
-
 export BUILD_USERNAME=rvsmooth
 export BUILD_HOSTNAME=crave
 export KBUILD_USERNAME=rvsmooth
 export KBUILD_HOSTNAME=crave
 export TZ=Asia/Kolkata
+export TEST=0
 
 ############################################################
 #                         FUNCTIONS                        #
@@ -17,7 +31,7 @@ export TZ=Asia/Kolkata
 function repo_set(){
 	rm -rf .repo/local_manifests
 	repo init -u https://github.com/LineageOS/android.git -b lineage-20.0 --git-lfs
-	git clone https://github.com/RMX1821-dev/local_manifests -b main .repo/local_manifests
+	git clone https://github.com/RMX1821-dev/local_manifests -b "${REPO}" .repo/local_manifests
 }
 
 function sync_projects(){
@@ -34,23 +48,41 @@ function lunch_build(){
 	fi
 }
 
+function build_clean(){
+	repo_set
+	sync_projects
+	lunch_build
+	make installclean
+	m bacon
+}
+
+function build_dirty(){
+
+	lunch_build
+	make installclean
+	m bacon
+}
 ############################################################
 #                         EXECUTION                        #
 ############################################################
 
 source build/envsetup.sh
 
-if [[ "$CLEAN_BUILD" == "1" ]]; then
-	repo_set
-	sync_projects
-	lunch_build
-	make installclean
-	m bacon
-else
-	echo "Doing dirty build."
-	lunch_build
-	make installclean
-	m bacon
+if [ "$TEST" == "1" ]; then
+	 export REPO=test
+ else
+	 export REPO=main
 fi
 
-
+for DIR in ${ANDROID_DIRS[@]}; do
+	if [ ! -d "${ANDROID_TOP}/${DIR}" ]; then
+		echo "Projects not found"
+		build_clean
+	elif 
+		[ "$CLEAN_BUILD" == "1" ]; then
+		build_clean
+	else
+		echo "Doing dirty build"
+		build_dirty
+	fi
+done
