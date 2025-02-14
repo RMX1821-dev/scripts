@@ -23,7 +23,6 @@ export BUILD_USERNAME=rvsmooth
 export BUILD_HOSTNAME=crave
 export KBUILD_USERNAME=rvsmooth
 export KBUILD_HOSTNAME=crave
-export TZ=Asia/Kolkata
 
 ############################################################
 #                         FUNCTIONS                        #
@@ -84,9 +83,11 @@ function check_project(){
 ############################################################
 #                         EXECUTION                        #
 ############################################################
+# set correct timezone
+sudo ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
 
+#build
 source build/envsetup.sh
-
 check_project
 
 if [ "$CLEAN_BUILD" == "1" ]; then
