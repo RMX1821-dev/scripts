@@ -51,13 +51,14 @@ function lunch_build(){
 function build_clean(){
 	repo_set
 	sync_projects
+	source build/envsetup.sh
 	lunch_build
 	make installclean
 	m bacon
 }
 
 function build_dirty(){
-
+	source build/envsetup.sh
 	lunch_build
 	make installclean
 	m bacon
@@ -87,7 +88,6 @@ function check_project(){
 sudo ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
 
 #build
-source build/envsetup.sh
 check_project
 
 if [ "$CLEAN_BUILD" == "1" ]; then
