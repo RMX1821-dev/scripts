@@ -86,12 +86,6 @@ function check_project(){
 # set correct timezone
 sudo ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
 
-# install python2
-echo "deb http://deb.debian.org/debian bullseye main contrib non-free" | tee /etc/apt/sources.list.d/bullseye.list
-sudo apt-get update 
-sudo apt-get install -y python2.7 python-is-python2 python2 
-sudo rm -rf /etc/apt/sources.list.d/bullseye.list
-
 #build
 check_project
 
